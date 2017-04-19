@@ -14,6 +14,12 @@ module.exports = function(grunt){
         src: ['index.html'],
         dest: 'server/public/views/'
       },
+      client: {
+        expand: true,
+        cwd: 'client/scripts',
+        src: ['client.js'],
+        dest: 'server/public/scripts/client.js'
+      },
       css: {
         expand: true,
         cwd: 'client/styles',
@@ -40,7 +46,7 @@ module.exports = function(grunt){
       files: [
         'client/**/*.*'
       ],
-      tasks: ['uglify', 'copy']
+      tasks: ['copy']
     }
   });
 
@@ -48,5 +54,5 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['uglify', 'copy', 'watch']);
+  grunt.registerTask('default', ['copy', 'watch']);
 };
