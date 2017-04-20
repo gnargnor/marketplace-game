@@ -10,9 +10,10 @@ market.marketService = GameService;
 myApp.factory('GameService', ['$interval', function($interval) {
 
     class MarketItem {
-        constructor(name, price) {
-            this.name = name;
+        constructor(itemObject, price) {
+            this.name = itemObject.name;
             this.price = price;
+            this.type = itemObject.type;
             $interval(() => {
                 this.fluctuate();
             }, 15000);
@@ -23,7 +24,14 @@ myApp.factory('GameService', ['$interval', function($interval) {
             this.price = Math.min(9.99, this.price);
         }
     }
-
+   class Collectible extends MarketItem {
+     constructor(itemObject, price){
+       super(itemObject, price);
+     }
+     fluctuate() {
+         this.price += (Math.random() / 5+0.1);
+   }
+ }
     class User {
         constructor() {
             this.cash = 100;
@@ -56,14 +64,35 @@ myApp.factory('GameService', ['$interval', function($interval) {
 
         }
     }
-    let marketItemProducts = ['Toaster', 'Lamp', 'Clock', 'BluRay Player', 'Apples', 'Oranges', 'Bananas', 'Grapes', 'Comic Books', 'Fancy Stuffed Animals', 'Jewelry', 'Wine'];
+    let marketItemProducts = [
+    {name:'Toaster',type:'MarketItem'},
+    {name:'Lamp',type:'MarketItem'},
+    {name:'Clock',type:'MarketItem'},
+    {name:'BluRay Player',type:'MarketItem'},
+    {name:'Apples',type:'Fruit'},
+    {name:'Oranges',type:'Fruit'},
+    {name:'Bananas',type:'Fruit'},
+    {name:'Grapes',type:'Fruit'},
+    {name:'Comic Books',type:'Collectible'},
+    {name:'Fancy Stuffed Animals',type:'Collectible'},
+    {name:'Jewelry',type:'Collectible'},
+    {name:'Wine',type:'Collectible'}];
 
     let marketItemArray = [];
 
     const startingPrice = 5;
 
     for (let i = 0; i < marketItemProducts.length; i++) {
-      let curItem = new MarketItem(marketItemProducts[i], startingPrice);
+      let curItem;
+      console.log(marketItemProducts[i]);
+      switch (marketItemProducts[i].type) {
+        case 'Collectible':
+          curItem = new Collectible(marketItemProducts[i], startingPrice);
+          break;
+        default:
+          curItem = new MarketItem(marketItemProducts[i], startingPrice);
+      }
+      console.log(curItem);
       curItem.fluctuate();
       marketItemArray.push(curItem);
     }
