@@ -3,20 +3,19 @@ let myApp = angular.module('myApp', []);
 
 myApp.controller('MarketController', ['GameService', function(GameService){
 let market = this;
-market.marketItemArray = GameService.marketItemArray;
-market.trader = GameService.trader;
+market.marketService = GameService;
 }]);
 
 
-myApp.factory('GameService', [function() {
+myApp.factory('GameService', ['$interval', function($interval) {
 
     class MarketItem {
         constructor(name, price) {
             this.name = name;
             this.price = price;
-            setInterval(() => {
+            $interval(() => {
                 this.fluctuate();
-            }, 3000);
+            }, 15000);
         }
         fluctuate() {
             this.price += (Math.random() - 0.5);
@@ -27,7 +26,7 @@ myApp.factory('GameService', [function() {
 
     class User {
         constructor() {
-            this.cash = 0;
+            this.cash = 100;
             this.inventory = {};
         }
         buy(item) {
@@ -55,25 +54,22 @@ myApp.factory('GameService', [function() {
 
         }
     }
-    let marketItemArray = ['Toaster', 'Lamp', 'Clock', 'BluRay Player', 'Apples', 'Oranges', 'Bananas', 'Grapes', 'Comic Books', 'Fancy Stuffed Animals', 'Jewelry', 'Wine'];
+    let marketItemProducts = ['Toaster', 'Lamp', 'Clock', 'BluRay Player', 'Apples', 'Oranges', 'Bananas', 'Grapes', 'Comic Books', 'Fancy Stuffed Animals', 'Jewelry', 'Wine'];
+
+    let marketItemArray = [];
 
     const startingPrice = 5;
 
-    for (let i = 0; i < marketItemArray.length; i++) {
-      let curItem = marketItemArray[i];
-      curItem = new MarketItem(curItem, startingPrice);
-      console.log(curItem);
+    for (let i = 0; i < marketItemProducts.length; i++) {
+      let curItem = new MarketItem(marketItemProducts[i], startingPrice);
       curItem.fluctuate();
-      marketItemArray[i] = curItem;
-      console.log(marketItemArray);
-
+      marketItemArray.push(curItem);
     }
 
     let trader = new User();
-
     return {
-     marketItemArray : marketItemArray,
-     trader : trader
+     marketItemArray: marketItemArray,
+     trader : trader,
    };
 
 }]);

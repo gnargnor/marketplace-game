@@ -12,7 +12,22 @@
 
   </head>
   <body ng-controller="MarketController as market">
- {{market.marketItemArray}}
+    <div class="container">
+      <h2>{{market.marketService.trader.cash | currency:"$"}}</h2>
+      <div ng-repeat="marketItem in market.marketService.marketItemArray">
+        <h4>{{marketItem.name}}</h4>
+        <p>Price: {{marketItem.price | currency:"$"}}</p>
+        <button ng-disabled="market.marketService.trader.cash < marketItem.price" ng-click="market.marketService.trader.buy(marketItem)">Buy</button>
+        <button ng-disabled="market.marketService.trader.inventory[marketItem.name].qty === 0 || !market.marketService.trader.inventory[marketItem.name].qty" ng-click="market.marketService.trader.sell(marketItem)">Sell</button>
+        <br />
+        <p>Quantity: {{market.marketService.trader.inventory[marketItem.name].qty || 0}}</p>
+        <p>Avg. Cost: {{market.marketService.trader.inventory[marketItem.name].avgPrice || 0 | currency:"$"}}</p>
+
+
+
+      </div>
+
+    </div>
 
   </body>
 </html>
