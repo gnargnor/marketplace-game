@@ -13,19 +13,27 @@
   </head>
   <body ng-controller="MarketController as market">
     <div class="container">
-      <h2>{{market.marketService.trader.cash | currency:"$"}}</h2>
-      <div ng-repeat="marketItem in market.marketService.marketItemArray">
-        <h4>{{marketItem.name}}</h4>
-        <p>Price: {{marketItem.price | currency:"$"}}</p>
-        <button ng-disabled="market.marketService.trader.cash < marketItem.price" ng-click="market.marketService.trader.buy(marketItem)">Buy</button>
-        <button ng-disabled="market.marketService.trader.inventory[marketItem.name].qty === 0 || !market.marketService.trader.inventory[marketItem.name].qty" ng-click="market.marketService.trader.sell(marketItem)">Sell</button>
-        <br />
-        <p>Quantity: {{market.marketService.trader.inventory[marketItem.name].qty || 0}}</p>
-        <p>Avg. Cost: {{market.marketService.trader.inventory[marketItem.name].avgPrice || 0 | currency:"$"}}</p>
-
-
-
+      <h1>MarketPlace App</h1>
+      <div class="row">
+        <div class="col-md-12">
+            <h2 class=" pull-right">Cash on hand: {{market.marketService.trader.cash | currency:"$"}}</h2>
+        </div>
       </div>
+      <div class="row">
+        <div class="col-md-3" ng-repeat="marketItem in market.marketService.marketItemArray">
+          <div class="market-item">
+            <h4>{{marketItem.name}}</h4>
+            <i class="placeholdericon glyphicon glyphicon-apple"></i>
+            <p>Price: {{marketItem.price | currency:"$"}}</p>
+            <button class="btn btn-success" ng-disabled="market.marketService.trader.cash < marketItem.price" ng-click="market.marketService.trader.buy(marketItem)">Buy</button>
+            <button class="btn btn-danger" ng-disabled="market.marketService.trader.inventory[marketItem.name].qty === 0 || !market.marketService.trader.inventory[marketItem.name].qty" ng-click="market.marketService.trader.sell(marketItem)">Sell</button>
+            <br />
+            <p>Quantity: {{market.marketService.trader.inventory[marketItem.name].qty || 0}}</p>
+            <p>Avg. Cost: {{market.marketService.trader.inventory[marketItem.name].avgPrice || 0 | currency:"$"}}</p>
+          </div>
+        </div>
+      </div>
+
 
     </div>
 

@@ -50,7 +50,9 @@ myApp.factory('GameService', ['$interval', function($interval) {
             let invSlot = this.inventory[item.name];
             invSlot.qty--;
             this.cash+=item.price;
-
+            if (invSlot.qty == 0) {
+              invSlot.avgPrice = 0;
+            }
 
         }
     }
