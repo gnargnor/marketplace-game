@@ -14,15 +14,14 @@ myApp.factory('GameService', ['$interval', function($interval) {
             this.name = itemObject.name;
             this.price = price;
             this.type = itemObject.type;
-            $interval(() => {
-                this.fluctuate();
-            }, 15000);
+
         }
         fluctuate() {
             this.price += (Math.random() - 0.5);
             this.price = Math.max(0.5, this.price);
             this.price = Math.min(9.99, this.price);
         }
+
     }
    class Collectible extends MarketItem {
      constructor(itemObject, price){
@@ -31,6 +30,7 @@ myApp.factory('GameService', ['$interval', function($interval) {
      fluctuate() {
          this.price += (Math.random() / 5+0.1);
    }
+
  }
     class User {
         constructor() {
@@ -38,11 +38,18 @@ myApp.factory('GameService', ['$interval', function($interval) {
             this.inventory = {};
         }
         buy(item) {
+
             if (!this.inventory[item.name]) {
                 this.inventory[item.name] = {
                     qty: 0,
-                    avgPrice: 0
+                    avgPrice: 0,
+                    type: item.type,
+                    productAge: []
+
                 };
+            }
+            if (item.type == 'Fruit'){
+              this.inventory[item.name].productAge.push(10);
             }
             let invSlot = this.inventory[item.name];
             let prevQty = invSlot.qty;
@@ -51,16 +58,18 @@ myApp.factory('GameService', ['$interval', function($interval) {
             this.cash-=item.price;
             let totalCost = prevQty * prevAvgPrice + item.price;
             invSlot.avgPrice = totalCost / invSlot.qty;
-            console.log(this.inventory);
             return invSlot;
         }
         sell(item) {
             let invSlot = this.inventory[item.name];
             invSlot.qty--;
+            invSlot.productAge.splice(0, 1);
             this.cash+=item.price;
             if (invSlot.qty == 0) {
               invSlot.avgPrice = 0;
             }
+
+
 
         }
     }
@@ -92,12 +101,33 @@ myApp.factory('GameService', ['$interval', function($interval) {
         default:
           curItem = new MarketItem(marketItemProducts[i], startingPrice);
       }
-      console.log(curItem);
       curItem.fluctuate();
       marketItemArray.push(curItem);
     }
 
     let trader = new User();
+
+    $interval(() => {
+        for (let i = 0; i < marketItemArray.length; i++){
+          marketItemArray[i].fluctuate();
+        }
+        for (let item in trader.inventory){
+          if (trader.inventory[item].type == 'Fruit') {
+
+            console.log(trader.inventory[item].productAge);
+            for (var i = 0; i < trader.inventory[item].productAge.length; i++) {
+              console.log('fruit', trader.inventory[item].productAge[i]);
+              trader.inventory[item].productAge[i]--;
+              if (trader.inventory[item].productAge[i] == 0){
+                trader.inventory[item].productAge.splice(i, 1);
+              }
+            }
+            console.log(trader.inventory[item].productAge);
+            trader.inventory[item].qty = trader.inventory[item].productAge.length;
+          }
+        }
+    }, 15000);
+
     return {
      marketItemArray: marketItemArray,
      trader : trader,
