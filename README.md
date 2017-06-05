@@ -57,7 +57,7 @@ Follow the steps below to get a copy of the Marketplace application up and runni
 * [Express](http://expressjs.com/)
 * [Angular JS](https://angularjs.org)
 * [MongoDB](https://mongodb.com)
-* [Mongoose](mongoosejs.com)
+* [Mongoose](http://mongoosejs.com)
 * [Bootstrap 3](http://getbootstrap.com/)
 * CSS3
 * HTML5
@@ -67,7 +67,7 @@ Follow the steps below to get a copy of the Marketplace application up and runni
 
 * **Logan Kelly**
   * [github.com/gnargnor](https://github.com/gnargnor)  
-  * [Bizzey Tech, LLC](www.bizzeytech.com)  
+  * [Bizzey Tech, LLC](https://www.bizzeytech.com)  
 
 * **Nic Wilson**  
   * [github.com/nicolaslwilson](https://github.com/nicolaswilson)  
